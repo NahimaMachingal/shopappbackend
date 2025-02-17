@@ -17,6 +17,12 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD='email'
     REQUIRED_FIELDS=['username']
 
+    def save(self, *args, **kwargs):
+        # If user is a superuser, force user_type to 'admin'
+        if self.is_superuser:
+            self.user_type = 'admin'
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.email
 
